@@ -1,0 +1,19 @@
+FROM golang:1.15 as builder
+
+WORKDIR /usr/src/app
+
+RUN go mod init example/hello
+
+COPY hello.go .
+
+RUN go build
+
+FROM scratch
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app .
+
+ENTRYPOINT [ "./hello"]
+
+#CMD ["go", "run", "."]
